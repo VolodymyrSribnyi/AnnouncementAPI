@@ -1,0 +1,47 @@
+﻿@using Client.Models.Enums
+@model Client.Models.AnnouncementDTO
+
+@{
+    ViewData["Title"] = "Редагувати оголошення";
+}
+
+<div class="form-container">
+    <h1>Редагувати оголошення</h1>
+
+    <form asp-action="Update" asp-route-id="@Model.Id" method="post" class="form">
+
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form-group">
+            <label>Назва</label>
+            <input asp-for="Title" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label>Опис</label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Статус</label>
+            <select asp-for="Status" class="form-control"
+                    asp-items="Html.GetEnumSelectList<Status>()">
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Категорія</label>
+            <input asp-for="Category" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label>Підкатегорія</label>
+            <input asp-for="SubCategory" class="form-control" />
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Зберегти</button>
+            <a asp-action="Index" class="btn btn-outline">Скасувати</a>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,91 @@
+﻿@using System.Text.Json
+@model IEnumerable<Client.Models.AnnouncementDTO>
+@{
+    var map = CategoryMap.Data.ToDictionary(
+        k => k.Key.ToString(),
+        v => v.Value.Select(x => x.ToString()).ToList()
+    );
+}
+<div class="announcements-container">
+    <header class="page-header">
+        <h1>Оголошення</h1>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a asp-action="Create" class="btn btn-primary">+ Створити оголошення</a>
+        }
+    </header>
+    <div class="filters">
+        <div id="categoryData"
+             data-map='@Html.Raw(JsonSerializer.Serialize(map))'>
+        </div>
+        <select id="categoryFilter">
+            <option value="">Всі категорії</option>
+            @foreach (var cat in Model.Select(x => x.Category).Distinct())
+            {
+                <option value="@cat">@cat</option>
+            }
+        </select>
+
+        <select id="subCategoryFilter">
+            <option value="">Всі підкатегорії</option>
+            @foreach (var sub in Model.Select(x => x.SubCategory).Distinct())
+            {
+                <option value="@sub">@sub</option>
+            }
+        </select>
+    </div>
+    <main class="announcements-grid">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var announcement in Model)
+            {
+                <div class="announcement-card"
+                     data-category="@announcement.Category"
+                     data-subcategory="@announcement.SubCategory">
+
+                    <a asp-action="Get" asp-route-id="@announcement.Id" class="card-link">
+                        <div class="card-content">
+                            <div class="card-meta">
+                                <span class="badge badge-category">
+                                    @announcement.Category / @announcement.SubCategory
+                                </span>
+                                <span class="badge badge-status">
+                                    @announcement.Status
+                                </span>
+                            </div>
+
+                            <h2 class="card-title">@announcement.Title</h2>
+                        </div>
+                    </a>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="card-actions">
+                            <a asp-action="Update" asp-route-id="@announcement.Id" class="btn btn-outline">
+                                Редагувати
+                            </a>
+
+                            <form asp-action="Delete" asp-route-id="@announcement.Id" method="post" class="delete-form">
+                                <button type="submit"
+                                        class="btn btn-danger"
+                                        onclick="return confirm('Ви впевнені?');">
+                                    Видалити
+                                </button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <div class="empty-state">
+                <p>Оголошень поки немає</p>
+            </div>
+        }
+    </main>
+</div>
+<script>
+
+
+</script>

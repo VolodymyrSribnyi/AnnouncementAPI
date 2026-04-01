@@ -1,0 +1,51 @@
+﻿@model Client.Models.AnnouncementDTO
+
+@{
+    ViewData["Title"] = "Перегляд оголошення";
+}
+
+<div class="announcement-details-container">
+    <div class="details-header">
+        <a asp-action="Index" class="btn btn-outline">← Назад до списку</a>
+
+        <div class="details-actions">
+            <a asp-action="Update" asp-route-id="@Model.Id" class="btn btn-primary">Редагувати</a>
+
+            <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="delete-form">
+                <button type="submit"
+                        class="btn btn-danger"
+                        onclick="return confirm('Ви впевнені, що хочете видалити це оголошення?');">
+                    Видалити
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="announcement-details-card">
+        <div class="details-meta">
+            <span class="badge badge-status">@Model.Status</span>
+
+            @if (Model.Category != null)
+            {
+                <span class="badge badge-category">@Model.Category</span>
+            }
+
+            @if (Model.SubCategory != null)
+            {
+                <span class="badge badge-category">@Model.SubCategory</span>
+            }
+        </div>
+
+        <h1 class="details-title">@Model.Title</h1>
+
+        <div class="details-info">
+            <p><strong>Створено:</strong> @Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</p>
+            <p><strong>Id:</strong> @Model.Id</p>
+        </div>
+
+        <div class="details-description">
+            <h3>Опис</h3>
+            <p>@Model.Description</p>
+        </div>
+    </div>
+</div>
