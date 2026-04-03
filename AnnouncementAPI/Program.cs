@@ -1,4 +1,3 @@
-
 using AnnouncementAPI.Application.Services;
 using AnnouncementAPI.Domain.Interfaces;
 using AnnouncementAPI.Infrastructure;
@@ -7,7 +6,6 @@ using AnnouncementAPI.Presentation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi;
 
 namespace AnnouncementAPI
 {
@@ -44,16 +42,16 @@ namespace AnnouncementAPI
             builder.Services.AddScoped<IAnnouncementsService, AnnouncementsService>();
 
             var app = builder.Build();
-
+            app.UseDeveloperExceptionPage();
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-            // Configure the HTTP request pipeline.
-            //if (app.Environment.IsDevelopment())
-            //{
-            //app.MapOpenApi();
             app.UseSwagger();
-            app.UseSwaggerUI();
-            //}
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("./v1/swagger.json", "AnnouncementsAPI v1");
+                c.RoutePrefix = "swagger";
+            });
+
 
             app.UseHttpsRedirection();
 
@@ -62,7 +60,6 @@ namespace AnnouncementAPI
 
 
             app.MapControllers();
-            app.MapGet("/ping", () => "API IS ALIVE, VOVA!");
             app.Run();
         }
     }
